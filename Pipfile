@@ -6,10 +6,9 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-opencv-python = "*"
+opencv-python = "==4.0.1.24"
 pillow = "*"
 imutils = "*"
-apscheduler = "*"
 
 [requires]
 python_version = "3.7"
