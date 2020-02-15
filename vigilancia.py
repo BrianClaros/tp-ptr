@@ -9,16 +9,17 @@ import datetime
 import imutils
 import argparse
 
+ENVIAR_DESP_DE_SEG = 60
 
 #Construccion de analizador de argumentos y analizar los argumentos
 ap = argparse.ArgumentParser()
 ap.add_argument("-a", "--min-area", type=int, default=500, help="minimum area size")
 args = vars(ap.parse_args())
 
-
 #inicio de server email
 email = srEmail.ServerEmail('smtp.gmail.com','587','facedetectionunaj@gmail.com','prog_real1')
 emailSend = False
+time_reset_flag = None
 
 # Cargamos el vídeo
 web_cam = cv2.VideoCapture(0)
@@ -54,6 +55,14 @@ while True:
         fondo = gris
         continue
 
+    # Reseteamos el flag y asignamos una nueva imagen al fondo para mantenerlo
+    # actualizado
+    if emailSend is True and time.time() >= time_reset_flag:
+        time_reset_flag = None
+        fondo = gris
+        emailSend = False
+        continue
+
     # Calculo de la diferencia entre el fondo y el frame actual
     resta = cv2.absdiff(fondo, gris)
 
@@ -85,8 +94,8 @@ while True:
             imageName = 'screenshot.jpg'
             cv2.imwrite(imageName, image)
             email.sendMsjImage('facedetectionunaj@gmail.com', 'ALERTA', imageName)
+            time_reset_flag = time.time() + ENVIAR_DESP_DE_SEG
             emailSend = True
-            email.stopServerEmail()
 
 
     cv2.putText(frame, "Estado de aula: {}".format(text), (10, 20),
@@ -94,13 +103,15 @@ while True:
     # Mostramos las imágenes de la cámara, el umbral y la resta
     cv2.imshow("Camara", frame)
 
-
     # Capturamos una tecla para salir
     key = cv2.waitKey(1) & 0xFF
 
     # Si ha pulsado la letra s, salimos
     if key == ord("s"):
         break
+
+# Paramos el servidor de emails
+email.stopServerEmail()
 
 # Liberamos la cámara y cerramos todas las ventanas
 web_cam.release()
