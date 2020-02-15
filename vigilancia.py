@@ -40,9 +40,6 @@ while True:
     if not grabbed:
         break
 
-    if not frame:
-        continue
-
 
     #ajustamos el tamaño del frame
     frame = imutils.resize(frame,width=500)
