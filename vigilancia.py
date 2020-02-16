@@ -93,7 +93,11 @@ while True:
             return_value, image = web_cam.read()
             imageName = 'screenshot.jpg'
             cv2.imwrite(imageName, image)
+
+            email.connectServerEmail()
             email.sendMsjImage('facedetectionunaj@gmail.com', 'ALERTA', imageName)
+            email.stopServerEmail()
+
             time_reset_flag = time.time() + ENVIAR_DESP_DE_SEG
             emailSend = True
 
@@ -101,7 +105,7 @@ while True:
     cv2.putText(frame, "Estado de aula: {}".format(text), (10, 20),
 		cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
     # Mostramos las imágenes de la cámara, el umbral y la resta
-    cv2.imshow("Camara", frame)
+    # cv2.imshow("Camara", frame)
 
     # Capturamos una tecla para salir
     key = cv2.waitKey(1) & 0xFF

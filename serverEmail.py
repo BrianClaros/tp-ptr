@@ -22,7 +22,6 @@ class ServerEmail():
         self.photo = ""
         self.server = smtplib.SMTP(self.server+':'+self.port)
         self.server.starttls()
-        self.server.login(self.email,self.password)
 
     def setEmail(self,email,password):
         self.email = email
@@ -47,6 +46,9 @@ class ServerEmail():
         msg['To'] = emailDestinatary
         msg['Subject'] = subject
         self.server.sendmail(msg['From'], msg['To'], msg.as_string())
+
+    def connectServerEmail(self):
+        self.server.login(self.email,self.password)
 
     def stopServerEmail(self):
         self.server.quit()
