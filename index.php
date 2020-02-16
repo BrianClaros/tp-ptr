@@ -50,7 +50,9 @@
       <input type="submit" name="button2"
               class="button" value="Apagar cámara" />
     </form>
+
+    <script>
+      window.stop();
+    </script>
   </body>
 </html>
-<!DOCTYPE html>
-<html>
