@@ -11,8 +11,8 @@ class ServerEmail():
 
 
 
-    def __init__(self, server,port,email,password):
-        self.server = server
+    def __init__(self, urlserver,port,email,password):
+        self.urlserver = urlserver
         self.port = port
         self.email = email
         self.password = password
@@ -20,8 +20,6 @@ class ServerEmail():
         self.to = ""
         self.subject = ""
         self.photo = ""
-        self.server = smtplib.SMTP(self.server+':'+self.port)
-        self.server.starttls()
 
     def setEmail(self,email,password):
         self.email = email
@@ -48,6 +46,8 @@ class ServerEmail():
         self.server.sendmail(msg['From'], msg['To'], msg.as_string())
 
     def connectServerEmail(self):
+        self.server = smtplib.SMTP(self.urlserver+':'+self.port)
+        self.server.starttls()
         self.server.login(self.email,self.password)
 
     def stopServerEmail(self):
